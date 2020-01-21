@@ -1,0 +1,129 @@
+---
+title: "popgen problem set 1"
+author: "Chi-Chun Liu"
+date: "1/19/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+**1.**  
+(a)  
+New Guinea:  
+$f_M = (2\cdot2 + 32)/2\cdot(2+32+269)= 0.059$.
+$f_N = 1 - f_M = 0.941$.  
+Guatemalan Indian: 
+$f_M = (112\cdot2 + 74)/2\cdot(112+74+17)= 0.734$.
+$f_N = 1 - f_M = 0.266$.  
+(b) Expected count:  
+New Guinea (n = 269 + 32 + 2 = 303):
+MM = $0.059^2 \cdot 303 = 1.05$. MN = $0.059 \cdot 0.941 \cdot 303 \cdot 2= 33.64$. NN = $0.941^2 \cdot 303 = 268.3$.  
+$\chi^2 = \sum (O-E)^2/E = 0.91$, $p(\chi^2_1 > 0.91) = 0.338$. HW not rejected.  
+Guatemalan Indian (n = 112 + 74 + 17 = 203):
+MM = $0.734^2 \cdot 203 = 109.36$. MN = $0.734 \cdot 0.266 \cdot 203 \cdot 2 = 79.27$. NN = $0.266^2 \cdot 203 = 14.36$.  
+$\chi^2 = \sum (O-E)^2/E = 0.898$, $p(\chi^2_1 > 0.898) = 0.343$. HW not rejected.  
+
+(c) When combined, the observed genotype table becomes:  
+
+|   |  MM  |  NM  |  NN  |
+|---|------|----- |------|
+| # |  114 |  106 |  286 |  
+
+$f_M = (2\cdot114 + 106)/2\cdot(114 + 106 + 286) = 0.33$.
+$f_N = 1 - f_M = 0.67$.  
+Expected count:  
+MM = $0.33^2 \cdot 506 = 55.1$. MN = $0.33 \cdot 0.67 \cdot 506 \cdot 2= 223.8$. NN = $0.66^2 \cdot 506 = 227.14$.  
+$\chi^2 = \sum (O-E)^2/E = 138.31$, $p(\chi^2_1 > 138.31) = 0$. HW rejected.   
+
+**2.**  
+$n = 2 + 53 + 5 + 13 + 3 + 21 = 97$.  
+allele frequency:  
+$f_a = (2 \cdot 2 + 13 + 3) / (97 \cdot 2) = 0.103$.
+$f_b = (53 \cdot 2 + 13 + 21) / (97 \cdot 2) = 0.722$.
+$f_c = (5 \cdot 2 + 3 + 21) / (97 \cdot 2) = 0.175$.
+
+Expected count:  
+$aa = f_a^2 \cdot n = 1.03$. $bb = f_b^2 \cdot n = 50.56$. $cc = f_c^2 \cdot n = 2.97$.  
+$ab = 2n \cdot f_a f_b = 14.43$. $ac = 2n \cdot f_a f_c = 3.5$. $bc = 2n \cdot f_b f_c = 24.51$
+
+$\chi^2 = \sum (O-E)^2/E = 3.13$, $df =5 - 2 =3$, $p(\chi^2_3 > 3.12) = 0.373$. HW not rejected  
+
+**3.**  
+(a) $Het_0 = 0.4$. $Het_{55} = (1-\frac{1}{2 \cdot 40})^{55} Het_0 = 0.2$.
+
+(b) $Het_0 = 0.4$. $Het_{55} = (1-\frac{1}{2 \cdot 400})^{55} Het_0 = 0.373$.
+
+
+**4.**
+(a)
+```{r cars}
+seq_list = list()
+seqs=c('AAAAAG', 'CTAGAG', 'AACATG', 'AACATG', 'CTAGAT')
+
+mean_pairwise_diff <- function(seqs){
+  for (i in 1:5) seq_list[[i]] = strsplit(seqs[i],'')[[1]]
+  
+  diff = c()
+  for (i in 1:4){
+    for (j in (i+1):5){
+      diff = c(diff, sum(seq_list[[i]] != seq_list[[j]]))
+    }
+  }
+  return(mean(diff))
+}
+mean_pairwise_diff(seqs)
+```
+
+
+(b)
+```{r}
+seq_list = list()
+seqs=c('ATAATG', 'AAAGAG', 'CACAAG', 'ATCATG', 'CAAGAT')
+mean_pairwise_diff(seqs)
+```
+
+The same as (a).
+
+(c)
+```{r}
+n_seg = 6
+harm_num = 1/1 + 1/2 + 1/3 + 1/4 
+n_seg/harm_num
+```
+
+The watterson estimator gives $\hat{\theta_w} = 2.88/1200 = 0.0024$. And the estimator based on nucleotide diversity gives $\hat{\theta_\pi} = 3.4/1200 = 0.0028$.  
+
+The Watterson estimator (number of segregating sites) is smaller when there is excess amount of low frequency variants. This can happen when there was population expansion following a bottleneck or there is puriying selection.
+
+
+**5.**
+
+(a) $f_{A1} = 0.4 + 0.2 = 0.6$.  $f_{B1} = 0.4 + 0.1 = 0.5$.  
+
+(b)
+$D = f_{A1B1} - f_{A1} f_{B1} = 0.4 - 0.5 \cdot 0.6 = 0.1$ 
+
+(c)
+$f_{A1B1,t = 100} - f_{A1}f_{B1} = (1-0.01)^{100} f_{A1B1,t=0} - f_{A1}f_{B1}$. Since $f_{A1} = 0.6$ and $f_{B1} = 0.5$ we have $f_{A1B1,t = 100} = 0.337$.  
+$f_{A1B2,t=100} =  f_{A1} - 0.337 = 0.263$. $f_{A2B1, t=100} =  f_{B1} - 0.337 = 0.163$. $f_{A2B2, t=100} =  1-0.337-0.263-0.163 = 0.237$.  
+$D_{t=100} = 0.337 - 0.5 \cdot 0.6 = 0.037$ 
+
+**6.**
+Let frequency of the allele As be $p_1$ and the frequency of other allele be $p_2$.  
+After marraige system brokedown, H-W equilibrium was restored, and $p_1 = \sqrt{0.01}=0.1$
+We know $f_{11} = (1-F)p_1^2 + Fp_1 \Rightarrow 17/800 = (1-F)0.01 + 0.1F$. Hence $F = 0.125$
+
+**7. **  
+1. Mutation generates a new allele (no back mutation).  
+2. Mutation drift equilibrium.  
+3. Mutation rate low u << 1.  
+
+**8. **  
+Sisters: for each sister, one allele was inherited maternally and the other paternally. So, 
+$F = 1 \cdot p(\text{the paternal allele drawn for both individuals}) + 1/2 \cdot p(\text{the maternal allele drawn for both individuals}) = 1/4 + 1/8 = 3/8$.  
+Brothers: They each have one copy of X-chromosome, which is inherited maternally . So, $F = p(\text{the same maternal allele drawn}) = 1/2$.  
+Brother and sister: for the brother the allele was inherited maternally. And for the sister an allele can be passed either maternally or paternally.
+So, $F = 1/2 \cdot p(\text{the maternal allele drawn for the sister}) = 1/4$.  
+
+Hence, brothers are the most closely related.
